@@ -1,0 +1,30 @@
+Name: apple
+Artist: da vinci
+Year: 1498
+Style: painting
+Length: 45 Height: 67
+
+Name: mona lisa
+Artist: da vinci
+Year: 1519
+Style: portrait
+Length: 70 Height: 92
+
+Name: violin
+Artist: van gogh
+Year: 1883
+Style: painting
+Length: 70 Height: 50
+
+Name: square
+Artist: malevich
+Year: 1932
+Style: cubism
+Length: 45 Height: 60
+
+Name: hernica
+Artist: picasso
+Year: 1940
+Style: cubism
+Length: 300 Height: 340
+
