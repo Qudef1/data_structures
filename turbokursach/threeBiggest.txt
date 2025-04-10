@@ -1,0 +1,18 @@
+Name: hernica
+Artist: picasso
+Year: 1940
+Style: cubism
+Length: 300 Height: 340
+
+Name: mona lisa
+Artist: da vinci
+Year: 1519
+Style: portrait
+Length: 70 Height: 92
+
+Name: new
+Artist: van gogh
+Year: 1784
+Style: classicism
+Length: 67 Height: 80
+

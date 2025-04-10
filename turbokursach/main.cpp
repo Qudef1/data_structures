@@ -1,7 +1,7 @@
 #include "qsort.cpp"
 #include "Picture.h"
 using namespace std;
-//bin search, lin search in text file 
+//bin search in text file 
 //proverki
 void sozdaniepic(Picture &pic)
 {
@@ -208,7 +208,7 @@ void selectionSort(Picture& pic,const char* path){
     fin.close();
     fout.close();
 }
-bool linSearch(Picture &pic, const char* artist,const char* path){
+void linSearch(Picture &pic, const char* artist,const char* path){
     ifstream fin;
     ofstream fout;
     fin.open(path, ios::binary);
@@ -232,9 +232,10 @@ bool linSearch(Picture &pic, const char* artist,const char* path){
         }
         for(int i = 0;i<size;i++){
             if(strcmp(picptr[i].artist,artist)==0){
+                pokaz(picptr[i]);
                 fout << "Name: " << picptr[i].name << endl;
-                 fout<< "Artist: "<<picptr[i].artist<<endl;
-                 fout << "Year: " << picptr[i].year << endl;
+                fout<< "Artist: "<<picptr[i].artist<<endl;
+                fout << "Year: " << picptr[i].year << endl;
                 fout<< "Style: " << picptr[i].style<<endl;
                 fout<<"Length: "<<picptr[i].length<<" Height: "<<picptr[i].height<<endl;
                 fout << endl;
@@ -242,7 +243,7 @@ bool linSearch(Picture &pic, const char* artist,const char* path){
         }
         fin.close();
         fout.close();
-        return false;
+        
     }
 }
 void lengthSort(Picture &pic, const char* path)
@@ -346,7 +347,10 @@ void betweenYears(Picture& pic,const char* filename){
     std::cout<<"enter gaps"<<std::endl;
     std::cin>>startYear>>endYear;
     ifstream fin;
+    ofstream fout;
+    fout.open("betweenYears.txt",ios::out);
     fin.open(filename,ios::binary);
+
     if(!fin.is_open()){
         fin.close();
         std::cout<<"error"<<std::endl;
@@ -358,17 +362,28 @@ void betweenYears(Picture& pic,const char* filename){
         {
             if(pic.year<=endYear&&pic.year>=startYear){
             picptr[size] = pic;
-            size++;}
+            size++;
+        }
         }
         insertionSort(picptr,size);
         for(int i = 0;i<size;i++){
             pokaz(picptr[i]);
+            fout << "Name: " << picptr[i].name << endl;
+            fout<< "Artist: "<<picptr[i].artist<<endl;
+            fout << "Year: " << picptr[i].year << endl;
+            fout<< "Style: " << picptr[i].style<<endl;
+            fout<<"Length: "<<picptr[i].length<<" Height: "<<picptr[i].height<<endl;
+            fout << endl;
         }
+
 } 
+    fout.close();
     fin.close();    
 }
 void SearchFortheBiggest(Picture &pic, const char* filename) {
     ifstream fin;
+    ofstream fout;
+    fout.open("threeBiggest.txt");
     fin.open(filename, ios::binary);
     if (!fin.is_open()) {
         fin.close();
@@ -405,11 +420,21 @@ void SearchFortheBiggest(Picture &pic, const char* filename) {
     for (int i = 0; i < outputCount; i++) {
         
         pokaz(picptr[i]);
+        fout << "Name: " << picptr[i].name << endl;
+        fout<< "Artist: "<<picptr[i].artist<<endl;
+        fout << "Year: " << picptr[i].year << endl;
+        fout<< "Style: " << picptr[i].style<<endl;
+        fout<<"Length: "<<picptr[i].length<<" Height: "<<picptr[i].height<<endl;
+        fout << endl;
+        
     }
+    fout.close();
 }
 
 void divideByStyles(Picture &pic, const char* filename) {
     ifstream fin;
+    ofstream fout;
+    fout.open("styles.txt",ios::out);
     fin.open(filename, ios::binary);
     if (!fin.is_open()) {
         cout << "error" << endl;
@@ -449,6 +474,7 @@ void divideByStyles(Picture &pic, const char* filename) {
 
     for (int i = 0; i < styleCount; i++) {
         cout << "Style: " << styles[i] << endl;
+        fout << "Style: " << styles[i] << endl;
 
 
         Picture stylePictures[MAX_PICTURES];
@@ -468,8 +494,16 @@ void divideByStyles(Picture &pic, const char* filename) {
         
         for (int j = 0; j < stylePictureCount; j++) {
             pokaz(stylePictures[j]);
+            fout << "Name: " << stylePictures[j].name << endl;
+            fout<< "Artist: "<<stylePictures[j].artist<<endl;
+            fout << "Year: " << stylePictures[j].year << endl;
+            fout<< "Style: " << stylePictures[j].style<<endl;
+            fout<<"Length: "<<stylePictures[j].length<<" Height: "<<stylePictures[j].height<<endl;
+            fout << endl;
         }
+        
     }
+    fout.close();
 }
 int main()
 {
@@ -507,10 +541,11 @@ int main()
             saveTofile(pic, path);
             break;
         case 4:
-            char temp[20];
+            char temp[50];
             cout<<"enter author to search for"<<std::endl;
-            cin.getline(temp,20);
-            cout <<(linSearch(pic,temp,path)?"there is picture by this author":"there are pictures by this author see them in linSearch")<<endl;
+            cin.getline(temp,50);
+            cout <<"see pictures by this author in the text-file linsearch.txt"<<endl;
+            linSearch(pic,temp,path);
             break;
         case 5:
             prosmotr(pic, path);
