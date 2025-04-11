@@ -1,0 +1,8 @@
+Pictures from year 1519:
+----------------------------------------
+Name: mona lisa
+Artist: da vinci
+Year: 1519
+Dimensions: 70x92
+Style: portrait
+----------------------------------------

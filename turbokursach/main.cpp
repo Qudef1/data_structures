@@ -1,30 +1,39 @@
 #include "qsort.cpp"
 #include "Picture.h"
 using namespace std;
-//bin search in text file 
-//proverki
+
 void sozdaniepic(Picture &pic)
 {
     cout << "enter picture name ";
     cin.getline(pic.name, 20);
-
     cout << "enter artist ";
     cin.getline(pic.artist, 20);
-
     cout << "enter year ";
-    cin >> pic.year;
-    cin.ignore();
-
+    while (!(cin >> pic.year) or cin.get() != '\n')
+	{
+		cout << "Error!" << endl << "Enter correct year: ";
+		cin.clear();
+		while (cin.get() != '\n');
+	}
     cout << "enter style of picture ";
     cin.getline(pic.style, 20);
-
-    cout << "enter length and height ";
-    cin >> pic.length >> pic.height;
+    cout << "enter length ";
+    while (!(cin >> pic.length) or cin.get() != '\n')
+	{
+		cout << "Error!" << endl << "Enter correct length: ";
+		cin.clear();
+		while (cin.get() != '\n');
+	}
+    cout<<"enter height ";
+    while (!(cin >> pic.height) or cin.get() != '\n')
+	{
+		cout << "Error!" << endl << "Enter correct height: ";
+		cin.clear();
+		while (cin.get() != '\n');
+	}
 }
-
 void prosmotr(Picture &stud, const char* filename);
 void prosmotrtxt(const char* path);
-
 void pokaz(const Picture &pic)
 {
     cout << "Name: " << pic.name << endl;
@@ -34,7 +43,6 @@ void pokaz(const Picture &pic)
             cout<<"Length: "<<pic.length<<" Height: "<<pic.height<<endl;
             cout << endl;
 }
-
 void ydalenie(Picture &pic, const char* filename, const char* name,const char* artist)
 {
     bool flag = false;
@@ -52,7 +60,7 @@ void ydalenie(Picture &pic, const char* filename, const char* name,const char* a
     {
         while (fin.read(reinterpret_cast<char *>(&pic), sizeof(Picture)))
         {
-            if (strcmp(pic.name, name) != 0&&strcmp(pic.artist, artist)!=0)
+            if (strcmp(pic.name, name) != 0 || strcmp(pic.artist, artist)!=0)
             {
                 fout.write(reinterpret_cast<char *>(&pic), sizeof(Picture));
             }
@@ -75,7 +83,6 @@ void ydalenie(Picture &pic, const char* filename, const char* name,const char* a
     remove(filename);
     rename("temp.bin", filename);
 }
-
 void redact(Picture &pic, const char* filename, const char* lastname,const char* artist)
 {
     bool flag = false;
@@ -97,11 +104,26 @@ void redact(Picture &pic, const char* filename, const char* lastname,const char*
             {
                 
                 cout << "enter new height, old one: " << pic.height << endl;
-                cin >> pic.height;
+                while (!(cin >> pic.height) or cin.get() != '\n')
+	            {
+		            cout << "Error!" << endl << "Enter correct height: ";
+		            cin.clear();
+		            while (cin.get() != '\n');
+	            }
                 cout << "enter new length, old one: " << pic.length << endl;
-                cin>>pic.length;
+                while (!(cin >> pic.length) or cin.get() != '\n')
+	            {
+		            cout << "Error!" << endl << "Enter correct length: ";
+		            cin.clear();
+		            while (cin.get() != '\n');
+	            }
                 cout << "enter new year, old one: " << pic.year << endl;
-                cin>>pic.year;
+                while (!(cin >> pic.year) or cin.get() != '\n')
+	            {
+		            cout << "Error!" << endl << "Enter correct year: ";
+		            cin.clear();
+		            while (cin.get() != '\n');
+	            }
                 cout << "enter new style, old one: " << pic.style << endl;
                 cin.getline(pic.style,sizeof(pic.style));
                 fout.write(reinterpret_cast<char *>(&pic), sizeof(Picture));
@@ -126,7 +148,6 @@ void redact(Picture &pic, const char* filename, const char* lastname,const char*
     remove(filename);
     rename("temp.bin", filename);
 }
-
 void prosmotrtxt(const char* path)
 {
     ifstream fin;
@@ -138,7 +159,6 @@ void prosmotrtxt(const char* path)
     }
     fin.close();
 }
-
 void insertionSort(Picture &pic, const char* path){
     ifstream fin;
     ofstream fout;
@@ -171,7 +191,6 @@ void insertionSort(Picture &pic, const char* path){
             }
     }
 }
-
 void selectionSort(Picture& pic,const char* path){
     
     ifstream fin;
@@ -215,7 +234,6 @@ void linSearch(Picture &pic, const char* artist,const char* path){
     fout.open("linsearch.txt",ios::out);
     if (!fin.is_open())
     {
-        
         fin.close();
         cout << "error"<<endl;
         throw "File is not opened";
@@ -281,10 +299,11 @@ void lengthSort(Picture &pic, const char* path)
     fin.close();
     fout.close();
 }
-
 void saveTofile(Picture &pic, const char* filename)
 {
+    ifstream fin;
     ofstream fout;
+    fin.open(filename,ios::binary);
     fout.open(filename, ios::binary | ios::app);
     if (!fout.is_open())
     {
@@ -292,11 +311,22 @@ void saveTofile(Picture &pic, const char* filename)
     }
     else
     {
+        Picture buf;
+        while (fin.read(reinterpret_cast<char *>(&buf), sizeof(Picture)))
+        {
+            
+            if(strcmp(pic.artist,buf.artist)==0&&strcmp(pic.name,buf.name)==0){
+                cout<<"there already exists this picture in the gallery"<<endl;
+                fin.close();
+                fout.close();
+                return;
+            }
+        }
         fout.write((char *)&pic, sizeof(Picture));
     }
+    fin.close();
     fout.close();
 }
-
 void prosmotr(Picture &pic, const char* filename)
 {
     ifstream fin;
@@ -317,9 +347,41 @@ void prosmotr(Picture &pic, const char* filename)
     }
     fin.close();
 }
+void findAllByYear(Picture pics[], int size, int year, ofstream &fout)
+{
+    bool found = false;
+    cout << "Pictures from year " << year << ":" << endl;
+    fout << "Pictures from year " << year << ":" << endl;
+    for(int i = 0; i < size; i++)
+    {
+        if(pics[i].year == year)
+        {
+            found = true;
+            cout << "Name: " << pics[i].name << endl;
+            cout << "Artist: " << pics[i].artist << endl;
+            cout << "Year: " << pics[i].year << endl;
+            cout << "Dimensions: " << pics[i].length << "x" << pics[i].height << endl;
+            cout << "Style: " << pics[i].style << endl;
 
+            fout << "Name: " << pics[i].name << endl;
+            fout << "Artist: " << pics[i].artist << endl;
+            fout << "Year: " << pics[i].year << endl;
+            fout << "Dimensions: " << pics[i].length << "x" << pics[i].height << endl;
+            fout << "Style: " << pics[i].style << endl;
+            
+        }
+    }
+    
+    if(!found)
+    {
+        cout << "No pictures found from year " << year << endl;
+        fout << "No pictures found from year " << year << endl;
+    }
+}
 void BinarySearch(Picture &pic,const char* filename){
     ifstream fin;
+    ofstream fout;
+    fout.open("binarysearch.txt",ios::out);
     fin.open(filename,ios::binary);
     if(!fin.is_open()){
         fin.close();
@@ -336,16 +398,36 @@ void BinarySearch(Picture &pic,const char* filename){
         insertionSort(picptr,size);
         int year;
         cout<<"enter year to search for"<<endl;
-        cin>>year;
-        cout<<(binSearch(picptr,year,size)?"there is picture, that was written in this year":"there is not")<<endl;
-        
+        while (!(cin >> year) or cin.get() != '\n')
+	            {
+		            cout << "Error!" << endl << "Enter correct year: ";
+		            cin.clear();
+		            while (cin.get() != '\n');
+	            }
+        if(binSearch(picptr,year,size)){
+            std::cout<<"see pictures in binarysearch.txt"<<std::endl;
+            findAllByYear(picptr,size,year,fout);
+        }
+        else
+            std::cout<<"there is not pictures by this year in the gallery"<<std::endl;
 } 
     fin.close();    
 }
 void betweenYears(Picture& pic,const char* filename){
     int startYear,endYear;
     std::cout<<"enter gaps"<<std::endl;
-    std::cin>>startYear>>endYear;
+    while (!(cin >> startYear) or cin.get() != '\n')
+	{
+	    cout << "Error!" << endl << "Enter correct year: ";
+	    cin.clear();
+		while (cin.get() != '\n');
+    }
+    while (!(cin >> endYear) or cin.get() != '\n')
+	{
+	    cout << "Error!" << endl << "Enter correct year: ";
+	    cin.clear();
+		while (cin.get() != '\n');
+    }
     ifstream fin;
     ofstream fout;
     fout.open("betweenYears.txt",ios::out);
@@ -375,7 +457,6 @@ void betweenYears(Picture& pic,const char* filename){
             fout<<"Length: "<<picptr[i].length<<" Height: "<<picptr[i].height<<endl;
             fout << endl;
         }
-
 } 
     fout.close();
     fin.close();    
@@ -399,9 +480,7 @@ void SearchFortheBiggest(Picture &pic, const char* filename) {
         size++;
     }
     fin.close();
-
     int outputCount = (size < 3) ? size : 3;
-
     for (int i = 0; i < size - 1; i++) {
         for (int j = i + 1; j < size; j++) {
             int areaI = picptr[i].height * picptr[i].length;
@@ -414,11 +493,8 @@ void SearchFortheBiggest(Picture &pic, const char* filename) {
             }
         }
     }
-
-    
     std::cout << "The three biggest pictures in the gallery are: " << endl;
     for (int i = 0; i < outputCount; i++) {
-        
         pokaz(picptr[i]);
         fout << "Name: " << picptr[i].name << endl;
         fout<< "Artist: "<<picptr[i].artist<<endl;
@@ -426,11 +502,9 @@ void SearchFortheBiggest(Picture &pic, const char* filename) {
         fout<< "Style: " << picptr[i].style<<endl;
         fout<<"Length: "<<picptr[i].length<<" Height: "<<picptr[i].height<<endl;
         fout << endl;
-        
     }
     fout.close();
 }
-
 void divideByStyles(Picture &pic, const char* filename) {
     ifstream fin;
     ofstream fout;
@@ -440,24 +514,17 @@ void divideByStyles(Picture &pic, const char* filename) {
         cout << "error" << endl;
         return;
     }
-
     const int MAX_PICTURES = 100; 
     Picture pictures[MAX_PICTURES];
     int pictureCount = 0;
-
-    
     while (fin.read(reinterpret_cast<char*>(&pic), sizeof(Picture)) && pictureCount < MAX_PICTURES) {
         pictures[pictureCount] = pic;
         pictureCount++;
     }
     fin.close();
-
-    
     const int MAX_STYLES = 20;
     char styles[MAX_STYLES][50];
     int styleCount = 0;
-
-    
     for (int i = 0; i < pictureCount; i++) {
         bool styleExists = false;
         for (int j = 0; j < styleCount; j++) {
@@ -471,27 +538,18 @@ void divideByStyles(Picture &pic, const char* filename) {
             styleCount++;
         }
     }
-
     for (int i = 0; i < styleCount; i++) {
         cout << "Style: " << styles[i] << endl;
         fout << "Style: " << styles[i] << endl;
-
-
         Picture stylePictures[MAX_PICTURES];
         int stylePictureCount = 0;
-
-        
         for (int j = 0; j < pictureCount; j++) {
             if (strcmp(pictures[j].style, styles[i]) == 0) {
                 stylePictures[stylePictureCount] = pictures[j];
                 stylePictureCount++;
             }
         }
-
-        
         selectionSort(stylePictures,stylePictureCount);
-
-        
         for (int j = 0; j < stylePictureCount; j++) {
             pokaz(stylePictures[j]);
             fout << "Name: " << stylePictures[j].name << endl;
@@ -501,7 +559,6 @@ void divideByStyles(Picture &pic, const char* filename) {
             fout<<"Length: "<<stylePictures[j].length<<" Height: "<<stylePictures[j].height<<endl;
             fout << endl;
         }
-        
     }
     fout.close();
 }
@@ -510,7 +567,6 @@ int main()
     cout<<"Welcome to my gallery you can:"<<endl<<"-------------------------------------------"<<endl;
     char path[30] = "gallery.bin";
     bool exitToken = true;
-    
     while (exitToken)
     {
         char lastname[50] = " ";
@@ -521,7 +577,7 @@ int main()
         cout << "1-sozdanie faila\n2-prosmotr\n3-dobavlenie" << endl
              << "4-nayti kartiny po avtory\n"
             << "5-ydalenie\n6-redaktirovanie\n7-by year\n"
-             << "8-by name in alphabetical order\n9-by width\n10-search for between years\n11-search for picture,that was written on special year\n12-search for the 3 biggest picture" << endl<<
+             << "8-by name in alphabetical order\n9-by width\n10-search for between years\n11-search for pictures,that was written on special year\n12-search for the 3 biggest picture" << endl<<
              "13-divide the gallery by styles"<<endl<<"0-exit"<<endl;
              cout<<"-------------------------------------------"<<endl;
         cin >> x;
@@ -551,7 +607,7 @@ int main()
             prosmotr(pic, path);
             cout << "enter name of a picture" << endl;
             cin.getline(lastname, sizeof(lastname));
-            cout<<"enter artist that wrote this picture";
+            cout<<"enter artist that wrote this picture "<<endl;
             cin.getline(artist,sizeof(artist));
             ydalenie(pic, path, lastname,artist);
             break;

@@ -32,9 +32,41 @@ Style: portrait
 Length: 70 Height: 92
 
 Style: classicism
+Name: headset
+Artist: scissors
+Year: 1145
+Style: classicism
+Length: 89 Height: 30
+
 Name: new
 Artist: van gogh
 Year: 1784
 Style: classicism
 Length: 67 Height: 80
+
+Style: newrock
+Name: spray
+Artist: mone
+Year: 1876
+Style: newrock
+Length: 25 Height: 30
+
+Name: turbo
+Artist: sanya
+Year: 2020
+Style: newrock
+Length: 786 Height: 752
+
+Style: expressionism
+Name: scream
+Artist: picasso
+Year: 1915
+Style: expressionism
+Length: 70 Height: 100
+
+Name: sunflower
+Artist: van gogh
+Year: 1867
+Style: expressionism
+Length: 78 Height: 90
 

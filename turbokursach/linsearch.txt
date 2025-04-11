@@ -1,12 +1,6 @@
-Name: violin
+Name: night
 Artist: van gogh
-Year: 1883
-Style: painting
-Length: 70 Height: 50
-
-Name: new
-Artist: van gogh
-Year: 1784
+Year: 1234
 Style: classicism
-Length: 67 Height: 80
+Length: 123 Height: 234
 
